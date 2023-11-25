@@ -10,26 +10,26 @@ function getComputerChoice() {
   }
 }
 
-let playerWins =0
-let computerWins =0
+let playerScore = 0;
+let computerScore = 0;
 
 function playRound(playerSelection, computerSelection) {
-    if (
-      (playerSelection === "rock" && computerSelection === "scissors") ||
-      (playerSelection === "scissors" && computerSelection === "paper") ||
-      (playerSelection === "paper" && computerSelection === "rock")
-    ) {
-      return playerWins++;
-    } else if (
-      (playerSelection === "rock" && computerSelection === "paper") ||
-      (playerSelection === "scissors" && computerSelection === "rock") ||
-      (playerSelection === "paper" && computerSelection === "scissors")
-    ) {
-      return computerWins++;
-    } else {
-      return "Ничья";
-    }
+  if (
+    (playerSelection === "rock" && computerSelection === "scissors") ||
+    (playerSelection === "scissors" && computerSelection === "paper") ||
+    (playerSelection === "paper" && computerSelection === "rock")
+  ) {
+    return playerScore++;
+  } else if (
+    (playerSelection === "rock" && computerSelection === "paper") ||
+    (playerSelection === "scissors" && computerSelection === "rock") ||
+    (playerSelection === "paper" && computerSelection === "scissors")
+  ) {
+    return computerScore++;
+  } else {
+    return "Ничья";
   }
+}
 
 let computerSelection = getComputerChoice();
 
@@ -37,50 +37,49 @@ const bunttons = document.querySelector(".buttons");
 const rounds = document.querySelector(".rounds");
 const moves = document.querySelector(".moves");
 const winner = document.querySelector(".winner");
-let totalRoundsLeft = 5;
 
+function isGameOver() {
+  return playerScore === 5 || computerScore === 5;
+}
 
 bunttons.addEventListener("click", (event) => {
   let target = event.target;
   let playerSelection = target.textContent;
   let para = document.createElement("p");
-  
-  para.textContent = `Игрок выбрал: ${playerSelection} Компютер выбрал ${computerSelection}`;
-  moves.appendChild(para);
- 
-  if (playerWins === 5) {
+
+  function playGame() {
+    if (isGameOver()) {
+      return;
+    }
+    playRound(playerSelection, computerSelection);
+    computerSelection = getComputerChoice();
+  }
+  if (!isGameOver()) {
+    para.textContent = `Игрок выбрал: ${playerSelection} Компютер выбрал ${computerSelection}`;
+    moves.appendChild(para);
+  }
+
+  if (playerScore === 5) {
     winner.textContent = "Игрок победил";
-    
-  } else if (computerWins === 5) {
+  } else if (computerScore === 5) {
     winner.textContent = "Компютер победил";
-    
   } else {
     ("Ничья");
   }
 
   switch (target.className) {
     case "rock":
-      playRound(playerSelection, computerSelection);
-      computerSelection = getComputerChoice();
+      playGame();
       break;
 
     case "paper":
-      playRound(playerSelection, computerSelection);
-      computerSelection = getComputerChoice();
+      playGame();
       break;
 
     case "scissors":
-      playRound(playerSelection, computerSelection);
-      computerSelection = getComputerChoice();
+      playGame();
       break;
   }
 
-  rounds.textContent = `Игрок: ${playerWins} Компютер: ${computerWins}`;
-
+  rounds.textContent = `Игрок: ${playerScore} Компютер: ${computerScore}`;
 });
-
-
-
-
-
-
